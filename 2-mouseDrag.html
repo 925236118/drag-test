@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+  #square {
+    background: #ff98a6;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  </style>
+</head>
+<body>
+<div id="square"></div>
+<script>
+window.onload = function () {
+  let oSquare = document.getElementById('square')
+  // 当鼠标按下时触发事件
+  oSquare.onmousedown = function (clickEvent) {
+    let clickX = clickEvent.offsetX
+    let clickY = clickEvent.offsetY
+    // TODO: 思考: 为什么此处监听window.onmousemove而不是oSquare.onmousemove?
+    window.onmousemove = function (moveEvent) {
+      oSquare.style.left = (moveEvent.clientX - clickX) + 'px'
+      oSquare.style.top = (moveEvent.clientY - clickY) + 'px'
+    }
+  }
+  // 当鼠标松开时触发事件
+  oSquare.onmouseup = function (clickEvent) {
+    // 清除监听事件
+    window.onmousemove = null
+  }
+}
+</script>
+</body>
+</html>
+

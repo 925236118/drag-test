@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+  #square {
+    background: #ff98a6;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  </style>
+</head>
+<body>
+<div id="square" style="transform: scale(1)"></div>
+<script>
+window.onload = function () {
+  let oSquare = document.getElementById('square')
+  // 当鼠标按下时触发事件
+  oSquare.onmousedown = function (clickEvent) {
+    let clickX = clickEvent.offsetX
+    let clickY = clickEvent.offsetY
+    // 监听在页面中鼠标移动事件 计算属性
+    window.onmousemove = function (moveEvent) {
+      oSquare.style.left = (moveEvent.clientX - clickX) + 'px'
+      oSquare.style.top = (moveEvent.clientY - clickY) + 'px'
+    }
+  }
+  // 当鼠标松开时触发事件
+  oSquare.onmouseup = function (clickEvent) {
+    // 清除监听事件
+    window.onmousemove = null
+  }
+  // 当鼠标滚轮滚动在方块上变化时
+  oSquare.onmousewheel = function (wheelEvent) {
+    // 缩放的级数
+    const scaleDelta = 0.05
+    // 缩放最大倍数
+    const scaleMax = 5
+    // 缩放最小倍数
+    const scaleMin = 0.25
+    // 获得已设置的scale css属性
+    let transformAttrList = oSquare.style.transform.split(' ')
+    let scaleCssAttr = transformAttrList.find(transformItem => /^scale/g.test(transformItem))
+    // 获得当前的缩放倍数
+    let currentScaleValue = 1
+    if (!scaleCssAttr) {
+      // 如果没有设置,默认为1
+      currentScaleValue = 1
+    } else {
+      currentScaleValue = parseFloat(scaleCssAttr.replace('scale(', '').replace(')', ''))
+    }
+    // 向下滚动 缩小
+    if (wheelEvent.wheelDelta > 0) {
+      if (currentScaleValue >= scaleMin) {
+        currentScaleValue -= scaleDelta
+      }
+    }
+    // 向上滚动 放大
+    if (wheelEvent.wheelDelta < 0) {
+      if (currentScaleValue <= scaleMax) {
+        currentScaleValue += scaleDelta
+      }
+    }
+    // 删除原来的scale属性
+    transformAttrList.splice(transformAttrList.indexOf(scaleCssAttr), 1)
+    // 拼接scale属性 并赋给元素
+    transformAttrList.push(`scale(${currentScaleValue})`)
+    let newTransformValue = transformAttrList.join(' ')
+    oSquare.style.transform = newTransformValue
+
+  }
+}
+</script>
+</body>
+</html>
+

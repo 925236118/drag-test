@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+  #square {
+    background: #ff98a6;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  </style>
+</head>
+<body>
+  <div id="square"></div>
+  <script>
+  window.onload = function () {
+    let oSquare = document.getElementById('square')
+    oSquare.onclick = function (clickEvent) {
+      if (window.onmousemove) {
+        window.onmousemove = null
+        return
+      }
+      // 获取点击时鼠标在方块中的坐标
+      let clickX = clickEvent.offsetX
+      let clickY = clickEvent.offsetY
+      window.onmousemove = function (moveEvent) {
+        // clientX和clientY是页面中的鼠标坐标
+        // 使用clientX - offsetX   可以得到方块左侧(left)坐标    top类似
+        oSquare.style.left = (moveEvent.clientX - clickX) + 'px'
+        oSquare.style.top = (moveEvent.clientY - clickY) + 'px'
+      }
+    }
+  }
+  </script>
+</body>
+</html>
